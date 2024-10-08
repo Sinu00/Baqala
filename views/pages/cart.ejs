@@ -1,14 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('../partials/header');%>
-
-
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planet Ecomm</title>
+    <link rel="stylesheet" href="../style/cartpage.css">
+    <link rel="stylesheet" href="../style/navbarstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
 <body>
-<div class="fixed">
   <%- include('../partials/navbar');%>
-</div>
 
-<div class="container ">
+  <main>
+    <h3>Cart Items</h3>
+    <section class="cartitemdisplay">
+      <% populatedCart.cartItems.forEach((cartItem, index) => { %>
+        <div class="cartitemscard">
+    
+          <div class="imagecontainer"> 
+            <img src="<%= cartItem.product.productImages[0].secure_url %>" class="cartitemimage">
+          </div>
+          
+          <div class="cartitemdetails">
+            <p class="cartItemProduct" product-data-id="<%= cartItem.product._id %>"><%= cartItem.product.productTitle %></p>
+            <p class="productPrice" data-price="<%= cartItem.product.productPrice %>" data-product-id="<%= cartItem.product._id %>">
+             Price: ₹<%= cartItem.product.productPrice %>
+            </p>
+            
+            <div class="quantity-controls">
+              <button class="decreaseQty" data-product-id="<%= cartItem.product._id %>">-</button>
+              <span class="quantity" data-quantity><%= cartItem.quantity %></span>
+              <button class="increaseQty" data-product-id="<%= cartItem.product._id %>">+</button>
+            </div>
+    
+            <p class="subTotal" data-subtotal="<%= cartItem.product.productPrice * cartItem.quantity %>" data-subtotal-cell="true" data-product-id="<%= cartItem.product._id %>">
+             <span>Sub-Total:</span> ₹<%= cartItem.product.productPrice * cartItem.quantity %>
+            </p>
+    
+            <button class="deleteCartItem" data-delete="<%= cartItem._id %>" cart-id="<%= populatedCart._id %>">Remove</button>
+
+          </div>
+        </div>
+      <% }) %>
+    </section>
+
+    <section class="checkoutcard">
+      <div class="finalcheckoutcard">
+        <h2>Checkout Details</h2>
+
+    
+        <div class="shipping-options">
+          <div class="shipping-option">
+            <input type="radio" class="shipping" name="shipping" id="freeShipping" value="FreeShipping" checked>
+            <label for="freeShipping">Free Shipping</label>
+          </div>
+          <div class="shipping-option">
+            <input type="radio" class="shipping" name="shipping" id="expressShipping" value="express">
+            <label for="expressShipping">Express Shipping (+15)</label>
+          </div>
+        </div>
+    
+        <div class="cost-summary">
+          <div class="summary-item1">
+            <p class="summary-label">Subtotal</p>
+            <p class="summary-value" id="subTotalCheckout">₹0.00</p>
+          </div>
+          <div class="summary-item">
+            <p class="summary-label">Total</p>
+            <p class="summary-value" id="totalCheckout">₹0.00</p>
+          </div>
+        </div>
+    
+        <button class="checkout-button" id="checkoutBtnId">Checkout</button>
+      </div>
+    </section>
+    
+
+    <div id="snackbar"></div>
+  </main>
+
+
+
+<!-- <div class="container ">
     <h2 class="d-flex justify-content-center mb-5 mt-5">
      Cart
     </h2>
@@ -97,10 +171,10 @@
     </div>
     
     
-</div>
+</div> -->
 
 
-  
+<!--   
 <div class="modal fade" id="removeCartIteSuccess" tabindex="-1" aria-labelledby="removeCartIteSuccess" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -110,12 +184,72 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 
- 
+ <script>
+// Ensure the script runs only after the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+  // Select all delete buttons and the checkout button
+  const deleteBtns = document.querySelectorAll('.deleteCartItem');
+  const checkoutBtn = document.getElementById('checkoutBtnId');
+
+  // Attach click event listeners to each delete button
+  deleteBtns.forEach(deleteBtn => {
+    deleteBtn.addEventListener('click', () => {
+      const deleteItem = deleteBtn.getAttribute('data-delete');
+      const cartId = deleteBtn.getAttribute('cart-id');
+      deleteCartItem(deleteItem, cartId);
+    });
+  });
+
+  // Function to handle deleting a cart item
+  function deleteCartItem(deleteItemId, cartId) {
+    fetch('/delete-cartItem', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ deleteItemId, cartId }) // Passing the item and cart IDs to the server
+    })
+    .then(response => response.json())
+    .then(result => {
+      if (result.message === 'Deleted successfully') {
+        console.log("Item deleted successfully");
+        showToast("Item Deleted Successfully")
+        window.location.reload(); // Reload the page to update the cart
+      } else {
+        showToast('Failed to delete the item:', result)
+        console.error('Failed to delete the item:', result);
+      }
+    })
+    .catch(err => {
+      showToast('Error while deleting the item:', err)
+      console.error('Error while deleting the item:', err);
+    });
+  }
+
+  // Redirect to checkout page on button click
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', () => {
+      window.location.href = 'checkout';
+    });
+  }
+});
+
+function showToast( message) {
+var x = document.getElementById("snackbar");
+x.textContent =  message; // Set the toast message
+x.classList.add("show");
+
+// Hide the toast after 3 seconds
+setTimeout(function() {
+x.classList.remove("show");
+}, 3000);
+}
+
+ </script>
 
 <script src="../js/cart.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 </body>
 </html>

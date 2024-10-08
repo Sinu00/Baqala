@@ -69,7 +69,7 @@ function updateSubtotalInDOM(productId, quantity) {
     const newSubtotal = productPrice * quantity;
 
     // Update the inner HTML of the subtotal element
-    subtotalCell.textContent = `₹${newSubtotal.toFixed(2)}`;
+    subtotalCell.textContent = `Sub-Total: ₹${newSubtotal.toFixed(2)}`;
 
     // Update the data-subtotal attribute for future reference
     subtotalCell.setAttribute('data-subtotal', newSubtotal);
@@ -106,14 +106,13 @@ function updateSubtotalInDOM(productId, quantity) {
 
     updateSubtotalAndTotal();
 
-      
-
   deleteBtns.forEach(deleteBtn => {
     deleteBtn.addEventListener('click', () =>{
+      console.log("clicked")
       const deleteItem = deleteBtn.getAttribute('data-delete');
       const cartId = deleteBtn.getAttribute('cart-id');
      deleteCartItem(deleteItem , cartId);
-    // console.log(deleteItem , 'lkjasdflkjasdf');
+     console.log(deleteItem , 'lkjasdflkjasdf');
     })
   })
 
@@ -128,11 +127,7 @@ function updateSubtotalInDOM(productId, quantity) {
     })
     .then(response => response.json())
     .then(result => {
-      const removeCartIteModal = new bootstrap.Modal(document.getElementById('removeCartIteSuccess'));
-      removeCartIteModal.show();
-      setTimeout(() => {
-        removeCartIteModal.hide();
-      }, 1000);
+      console.log("here")
       window.location.reload();
     })
     .catch(err => {

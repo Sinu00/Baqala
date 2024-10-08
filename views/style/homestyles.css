@@ -405,39 +405,39 @@ background-color: rgba(57, 74, 32); /* Darker green on hover */
 /* tooltip toast */
 
 #snackbar {
-    visibility: hidden; /* Hidden by default */
-    min-width: 250px;
-    background-color: rgba(57, 74, 32, 0.8); ; /* Light blue background */
-    color: #ffffff; /* White text color */
-    text-align: center;
-    border-radius: 5px;
-    padding: 16px;
-    position: fixed;
-    z-index: 1;
-    font-size: 17px;
-    opacity: 0; /* Fully transparent */
-    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+  visibility: hidden; /* Hidden by default */
+  min-width: 250px;
+  background-color: rgba(57, 74, 32, 0.8); ; /* Light blue background */
+  color: #ffffff; /* White text color */
+  text-align: center;
+  border-radius: 5px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  font-size: 17px;
+  opacity: 0; /* Fully transparent */
+  transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+/* Position for larger screens (desktop/laptops) */
+@media (min-width: 768px) {
+  #snackbar {
+    top: 65px;
+    right: 20px;
   }
-  
-  /* Position for larger screens (desktop/laptops) */
-  @media (min-width: 768px) {
-    #snackbar {
-      top: 65px;
-      right: 20px;
-    }
+}
+
+/* Position for smaller screens (mobile devices) */
+@media (max-width: 767px) {
+  #snackbar {
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
   }
-  
-  /* Position for smaller screens (mobile devices) */
-  @media (max-width: 767px) {
-    #snackbar {
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-  }
-  
-  /* Show class to make the toast visible */
-  #snackbar.show {
-    visibility: visible;
-    opacity: 1; /* Fully visible */
-  }
+}
+
+/* Show class to make the toast visible */
+#snackbar.show {
+  visibility: visible;
+  opacity: 1; /* Fully visible */
+}

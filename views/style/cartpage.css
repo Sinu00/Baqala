@@ -1,0 +1,254 @@
+/* Reset and base styles */
+html {
+    scroll-behavior: smooth;
+}
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f2f2f2;
+  }
+/* Base styles for the cart items */
+
+.cartitemdisplay{
+    margin: 30px;
+}
+
+.checkoutcard{
+    margin: 30px;
+}
+
+.cartitemscard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 17px;
+    margin-bottom: 10px;
+    background-color: #fff;
+  }
+  
+  /* Styling for the image container */
+  .imagecontainer {
+    flex: 0 0 140px; /* Fix the size of the image container */
+    margin-right: 15px;
+  }
+  
+  .cartitemimage {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  
+  /* Details section styles */
+  .cartitemdetails {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+  }
+  
+  .cartItemProduct {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .productPrice {
+    margin: 5px 0;
+  }
+  
+  .quantity-controls {
+    display: flex;
+    align-items: center;
+  }
+  
+  .decreaseQty,
+  .increaseQty {
+    background-color: #ddd;
+    border-radius: 5px ;
+    border: none;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+  }
+  
+  .quantity {
+    margin: 0 10px;
+  }
+  
+  .subTotal {
+    margin-top: 5px;
+    font-weight: bold;
+  }
+  
+  .deleteCartItem {
+    background-color: #fefefe;
+    color: black;
+    border: 1px solid black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+
+  /* checkout section */
+  .finalcheckoutcard {
+    border-radius: 17px;
+    background-color: white;
+    justify-content: center;
+    margin-top: 30px;
+    padding: 30px;
+    border: 1px solid #e0e0e0;
+  }
+
+  .shipping-options{
+    display: none;
+  }
+
+  .summary-item1{
+    display: none;
+  }
+  
+  
+  .shipping-info {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .shipping-options {
+    margin-bottom: 20px;
+  }
+  
+  .shipping-option {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+  }
+  
+  .shipping-option input[type="radio"] {
+    margin-right: 10px;
+  }
+  
+  .cost-summary {
+    margin-bottom: 20px;
+  }
+  
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+    font-weight: 500;
+  }
+  
+  .summary-label {
+    font-size: 1rem;
+  }
+  
+  .summary-value {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  .checkout-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+  }
+  
+  .checkout-button:hover {
+    background-color: #555;
+  }
+
+
+
+  
+  /* Responsive styles for desktop */
+  @media (min-width: 768px) {
+    .cartitemscard {
+      flex-direction: row;
+      align-items: center;
+    }
+  
+    section{
+        margin: 60px 60px 0 60px ;
+    }
+
+    .imagecontainer {
+      flex: 0 0 120px; /* Increase the image container size on desktop */
+    }
+  
+    .cartitemdetails {
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  
+    .cartItemProduct, .productPrice, .subTotal {
+      margin: 0 20px;
+    }
+  
+    .quantity-controls {
+      margin: 0 20px;
+    }
+  
+    .deleteCartItem {
+      margin: 0 20px;
+    }
+  }
+  
+
+/* tooltip toast */
+#snackbar {
+    visibility: hidden; /* Hidden by default */
+    min-width: 250px;
+    background-color: rgba(57, 74, 32, 0.8); ; /* Light blue background */
+    color: #ffffff; /* White text color */
+    text-align: center;
+    border-radius: 5px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    font-size: 17px;
+    opacity: 0; /* Fully transparent */
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+  }
+  
+  /* Position for larger screens (desktop/laptops) */
+  @media (min-width: 768px) {
+    #snackbar {
+      top: 65px;
+      right: 20px;
+    }
+  }
+  
+  /* Position for smaller screens (mobile devices) */
+  @media (max-width: 767px) {
+    #snackbar {
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+  
+  /* Show class to make the toast visible */
+  #snackbar.show {
+    visibility: visible;
+    opacity: 1; /* Fully visible */
+  }
