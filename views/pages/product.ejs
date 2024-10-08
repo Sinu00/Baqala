@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style/productmoreinfo.css">
+    <link rel="stylesheet" href="../style/navbarstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <title>Product</title>
+</head>
+<body>
+
+     <%- include('../partials/navbar');%>
+
+     <main>
+      <section class="product-container">
+        <div class="product-image">
+            <img src="<%= product.productImages[0].secure_url %>" alt="Product Image">
+        </div>
+    
+        <div class="product-info">
+            <h2><%= product.productTitle.toUpperCase() %></h2>
+            <p><%= product.productDescription %></p>
+            <p>Category: <%= product.category %></p>
+            <h3><span>&#8377;</span> <%= product.productPrice %></h3>
+            <div class="quantity-section">
+                <label for="quantity" class="quantity-label">Quantity:</label>
+                <div class="input-group">
+                    <button class="quantity-btn" id="decrementButton">-</button>
+                    <input type="number" class="quantity-input" product-data-id="<%= product._id %>" id="quantityInput" min="1" value="1" step="1">
+                    <button class="quantity-btn" id="incrementButton">+</button>
+                </div>
+            </div>
+            <button class="add-to-cart-btn" id="addToCartBtnId" onclick="addToCart('<%= product._id %>') ">Add to Cart</button>
+        </div>
+    </section>
+    
+    <div id="snackbar"></div>
+
+     </main>
+    
+    <!-- <div class="container">
+        <div class="row">
+            <div class="col-md-6 mt-5">
+                <div id="productCarousel" class="carousel slide" data-ride="carousel">
+                  <div class="carousel-inner">
+                    <% product.productImages.forEach((image, index) => { %>
+                      <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                        <img class="d-block mx-auto" src="<%= image.secure_url %>" alt="View Product" data-toggle="modal" data-target="#imageModal" style="max-width: 100%; max-height: 60vh;">
+                      </div>
+                    <% }); %>
+                  </div>
+                  <a class="carousel-control-prev" href="#productCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="carousel-control-next" href="#productCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </div>
+              </div>
+          
+          <div class="col-md-6 mt-5">
+            <div class="d-flex flex-column h-100">
+              <div>
+                <h2 class="mb-3"><%= product.productTitle %></h2>
+                <p class="mb-3"><%= product.productDescription %></p>
+                <h3 class="mb-3"><span>&#8377;</span> <%= product.productPrice %></h3>
+                <p class="text-secondary mb-3">Category: <%= product.category %></p>
+                <div class="mb-3">
+                  <label for="quantity" class="mb-2 d-block">Quantity:</label>
+                  <div class="input-group mt-3">
+                    <button class="btn btn-outline-dark" type="button" id="decrementButton">-</button>
+                    <input type="number" class="form-control" product-data-id="<%= product._id %>" id="quantityInput" min="1" value="1" step="1">
+                    <button class="btn btn-outline-dark" type="button" id="incrementButton">+</button>
+                  </div>
+                </div>
+                <button class="btn btn-dark w-100" id="addToCartBtnId">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-5">
+          <div class="col-md-12">
+            <h3>Description</h3>
+            <p class="text-justify"><%= product.productDescription %></p>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <h6 class="text-secondary">Additional Information</h6>
+            <p class="text-justify"><%= product.additionalInformation %></p>
+          </div>
+        </div>
+      </div>
+      
+
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-body">
+                  zoomed image here
+                    <img src="<%= product.productImages[0].secure_url %>" alt="Zoomed Image" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="addedSuccesslabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addedSuccesslabel">Added to cart</h5>
+            </div>
+            </div>
+          </div>
+        </div>  -->
+
+    <script>
+
+document.addEventListener('DOMContentLoaded', () =>{
+const incrementButton = document.getElementById('incrementButton');
+const decrementButton = document.getElementById('decrementButton');
+const quantityInput = document.getElementById('quantityInput');
+let currentQuantity = parseInt(quantityInput.value);
+// const  success = document.getElementById('successModal');
+const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+// const incrementButtons = document.querySelectorAll('.cartIncrementButton');
+// const decrementButtons = document.querySelectorAll('.cartDecrementButton');
+// const quantityInputs = document.querySelectorAll('.cartQuantityInput');
+
+
+const decreaseButtons = document.querySelectorAll('.decreaseQty');
+  const increaseButtons = document.querySelectorAll('.increaseQty');
+  const quantityElements = document.querySelectorAll('.quantity');
+
+
+
+incrementButton.addEventListener('click', () => {
+  currentQuantity++;
+  quantityInput.value = currentQuantity;
+});
+
+decrementButton.addEventListener('click', () => {
+  if (currentQuantity > 1) {
+    currentQuantity--;
+    quantityInput.value = currentQuantity;
+  }
+});
+const addToCartBtn = document.getElementById('addToCartBtnId');
+
+addToCartBtn.addEventListener('click', () => {
+  let quantity = currentQuantity;
+  let productId = quantityInput.getAttribute('product-data-id');
+
+  fetch('/add-to-cart', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ productId, quantity }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      // Handle the response as needed
+      console.log('Added successfully');
+      successModal.show();
+      setTimeout(() => {
+        successModal.hide();
+      }, 1000);
+      
+    })
+    .catch(error => {
+      console.error('Error adding to cart:', error);
+    });
+});
+});
+
+    </script>
+    <script src="../js/addToCart.js"></script>
+</body>
+
+<!-- <script src="../js/cart.js"></script> -->
+</html>

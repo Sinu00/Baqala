@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/header');%>
+
+<body>
+
+  <div class=" d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <form action="/signup" id="SignUpForm" method="POST" class="bg-light w-100 p-5 text-dark rounded" style="max-width: 450px;">
+      <h2 class="text-center fw-bold mb-4" style="font-family: 'Poppins', sans-serif;"><b>Sign Up to Planet</b></h2>
+
+      <!-- <div class="mb-4">
+        <button type="button" name="" id="googlebutton" class="btn btn-lg btn-block btn-outline-secondary">
+          Sign Up with Google
+        </button>
+      </div>
+
+      <p class="text-center text-secondary mb-4">or</p> -->
+
+      <div class="mb-4">
+        <input type="text" name="name" id="nameSignup" placeholder="Name" class="form-control form-control-lg" />
+      </div>
+      <div class="mb-4">
+        <input type="email" name="email" id="emailSignup" placeholder="Email" class="form-control form-control-lg" />
+      </div>
+
+      <% if (typeof error !== 'undefined') { %>
+        <p class="text-danger"><%= error %></p>
+    <% } %>
+
+      <div class="mb-4">
+        <input type="password" name="password" id="passSignup" placeholder="Password" class="form-control form-control-lg" />
+      </div>
+
+      <div class="mb-4">
+        <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password"
+          class="form-control form-control-lg" />
+      </div>
+
+      <button type="submit" class="btn btn-dark btn-lg btn-block mb-4">Sign Up</button>
+
+      <div class="text-center">
+        <p>Already have an account? <a class="text-dark text-decoration-none" href="/login">Sign In</a></p>
+      </div>
+    </form>
+  </div>
+
+  <script src="/js/signupValidate"></script>
+  <%- include('../partials/footer');%>
+
+</body>
+
+</html>

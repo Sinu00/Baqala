@@ -1,0 +1,78 @@
+<div id="users" class="contents mt-5">
+  <h2 class="container-fluid d-flex justify-content-center mb-4"><strong>Users</strong></h2>
+    <div class="table-responsive">
+      <table class="table table-light">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">No.</th>
+            <th scope="col">User Id</th>
+            <th scope="col">User Name</th>
+            <th scope="col">User Email</th>
+            <!-- <th scope="col">Status</th> -->
+            <th scope="col">Block/Unblock</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach((user, index) => { %>
+            <tr>
+              <td scope="row"><%= index + 1 %></td>
+              <td><%= user._id %></td>
+              <td><%= user.name %></td>
+              <td><%= user.email %></td>
+              <!-- <td> <span class=""></span></td> -->
+              <td>
+                <button type="button" onclick="blockUser('<%= user._id %>')" class="btn <%= user.status ? 'btn-success' : 'btn-danger' %>" id="blockBtn">
+                  <span id="blockStatus"><%= user.status ? 'Unblock' : 'Block' %></span>
+                </button>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  
+    <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+              <% if (currentPage > 1) { %>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+              <% } %>
+              <li class="page-item disabled">
+                <span class="page-link">Page <%= currentPage %> of <%= totalPages %></span>
+              </li>
+              <% if (currentPage < totalPages) { %>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </li>
+              <% } %>
+            </ul>
+          </nav>
+
+  </div>
+  
+  <script>
+    function blockUser(userId) {
+      fetch(`/admin/block-user/${userId}`, { method: 'POST' })
+        .then(res => res.json())
+        .then(data => {
+          if (data.blockStatus !== undefined) {
+            console.log(data.blockStatus, 'this is res. message');
+            const blockStatusSpan = document.getElementById('blockStatus');
+            blockStatusSpan.textContent = data.blockStatus ? 'Unblock' : 'Block';
+  
+            window.location.href = '/admin/dashboard';
+          } else {
+            console.log('Failed to block/unblock the user');
+          }
+        })
+        .catch(error => console.log(error));
+    }
+  </script>
+  

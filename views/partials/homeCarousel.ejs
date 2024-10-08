@@ -1,0 +1,61 @@
+<div class="d-flex mt-5">
+  <div class="flex-shrink-0 col-md-6">
+    <div class="main mt-2">
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <% banners.forEach((banner) => { %>
+            <% banner.bannerImages.forEach((image, index) => { %>
+              <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                <img src="<%= image.secure_url %>" class="d-block w-100" alt="Banner Image">
+              </div>
+            <% }) %>
+          <% }) %>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<style>
+
+  /* General styles for the carousel */
+.carousel {
+  margin: 0 auto; /* Center the carousel */
+}
+
+.carousel-item img {
+  width: 100%; /* Full width */
+  height: auto; /* Maintain aspect ratio */
+}
+
+/* For larger screens */
+@media (min-width: 768px) {
+  .carousel-inner {
+    height: 400px; /* Set a fixed height for larger screens */
+  }
+
+  .carousel-item img {
+    height: 100%; /* Fill the container height */
+    object-fit: cover; /* Cover the entire area */
+    object-position: center; /* Center the image */
+  }
+}
+
+/* For extra large screens */
+@media (min-width: 1200px) {
+  .carousel-inner {
+    height: 600px;
+    width: 100%; /* Larger height for very large screens */
+  }
+}
+
+</style>

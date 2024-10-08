@@ -1,0 +1,168 @@
+/* Basic styling for mobile: image and details in a column */
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f2f2f2;
+  }
+
+.product-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    max-width: 100%;
+}
+
+/* Style for product image */
+.product-image img {
+    height: auto;
+    max-width: 400px;
+    margin: 10px;
+    border-radius: 15px;
+    object-fit: cover;
+    overflow: hidden;
+}
+
+/* Styles for product information */
+.product-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    width: 90%;
+}
+
+/* Individual element styles in product info */
+.product-info h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin: 15px 0;
+}
+
+.product-info p {
+    font-size: 1rem;
+    color: #555;
+    margin: 5px 0;
+}
+
+.product-info h3 {
+    font-size: 1.5rem;
+    color: rgba(57, 74, 32, 0.8);
+    margin: 15px 0;
+}
+
+.quantity-section {
+    margin: 15px 0;
+}
+
+.quantity-label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Quantity selector styling */
+.input-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.quantity-btn {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(57, 74, 32, 0.8);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.quantity-input {
+    width: 60px;
+    text-align: center;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Add to Cart button styling */
+.add-to-cart-btn {
+    background-color: rgba(57, 74, 32, 0.8);
+    color: #fff;
+    padding: 15px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #555;
+}
+
+/* Media query for large screens: rearrange to two-column layout */
+@media (min-width: 768px) {
+    .product-container {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        max-width: 80%;
+        margin: 50px 0 0 200px;
+        padding: 20px;
+    }
+
+    .product-image {
+        width: 45%;
+        margin-right: 20px;
+    }
+
+    .product-info {
+        align-items: flex-start;
+        text-align: left;
+        width: 55%;
+    }
+}
+
+
+#snackbar {
+    visibility: hidden; /* Hidden by default */
+    min-width: 250px;
+    background-color: rgba(57, 74, 32, 0.8); ; /* Light blue background */
+    color: #ffffff; /* White text color */
+    text-align: center;
+    border-radius: 5px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    font-size: 17px;
+    opacity: 0; /* Fully transparent */
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+  }
+  
+  /* Position for larger screens (desktop/laptops) */
+  @media (min-width: 768px) {
+    #snackbar {
+      top: 65px;
+      right: 20px;
+    }
+  }
+  
+  /* Position for smaller screens (mobile devices) */
+  @media (max-width: 767px) {
+    #snackbar {
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+  
+  /* Show class to make the toast visible */
+  #snackbar.show {
+    visibility: visible;
+    opacity: 1; /* Fully visible */
+  }

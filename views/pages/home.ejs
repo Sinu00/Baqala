@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planet Ecomm</title>
+    <link rel="stylesheet" href="../style/homestyles.css">
+    <link rel="stylesheet" href="../style/navbarstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <%- include('../partials/navbar'); %>
+  <!-- NAVBAR SECTION -->
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="carousel">
+                    <% banners.forEach((banner) => { %>
+                        <% banner.bannerImages.forEach((image) => { %>
+                            <img src="<%= image.secure_url %>" alt="Banner Image">
+                        <% }) %>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+
+        <!-- DISCOUNTED PRODUCT SECTION -->
+        <section class="discounted-products">
+          <h2 class="section-title">Discounted Products</h2>
+          <div class="card-slider-container">
+            <div class="card-container">
+                <% products.forEach(function(product) { %>
+                    <% if (product.productHasDiscount) { %>
+                        <div class="card">
+                              <a href="/products/<%= product._id %>" class="image-container">
+                              <img src="<%= product.productImages[0].secure_url %>" alt="<%= product.productTitle %>" class="card-img">
+                            </a>
+                            <h3 class="card-title"><%= product.productTitle %></h3>
+                            <% if (product.offers && product.offers.length > 0 && product.offers[0]) { %>
+                                <div class="OfferTag">Offer - <%= product.offers[0].discountPercentage %>% off</div>
+                            <% } %>
+                            <div class="cardbuttoncontainer">
+                                <p class="card-price">₹ <%= product.productPrice %></p>
+                                <button class="card-button" onclick="addToCart('<%= product._id %>') ">
+                                    <svg class="svg-icon" viewBox="0 0 24 24">
+                                        <path d="M17.72,5.011H8.026c-0.271,0-0.49,0.219-0.49,0.489c0,0.271,0.219,0.489,0.49,0.489h8.962l-1.979,4.773H6.763L4.935,5.343C4.926,5.316,4.897,5.309,4.884,5.286c-0.011-0.024,0-0.051-0.017-0.074C4.833,5.166,4.025,4.081,2.33,3.908C2.068,3.883,1.822,4.075,1.795,4.344C1.767,4.612,1.962,4.853,2.231,4.88c1.143,0.118,1.703,0.738,1.808,0.866l1.91,5.661c0.066,0.199,0.252,0.333,0.463,0.333h8.924c0.116,0,0.22-0.053,0.308-0.128c0.027-0.023,0.042-0.048,0.063-0.076c0.026-0.034,0.063-0.058,0.08-0.099l2.384-5.75c0.062-0.151,0.046-0.323-0.045-0.458C18.036,5.092,17.883,5.011,17.72,5.011z"></path>
+                                        <path d="M8.251,12.386c-1.023,0-1.856,0.834-1.856,1.856s0.833,1.853,1.856,1.853c1.021,0,1.853-0.83,1.853-1.853S9.273,12.386,8.251,12.386z M8.251,15.116c-0.484,0-0.877-0.393-0.877-0.874c0-0.484,0.394-0.878,0.877-0.878c0.482,0,0.875,0.394,0.875,0.878C9.126,14.724,8.733,15.116,8.251,15.116z"></path>
+                                        <path d="M13.972,12.386c-1.022,0-1.855,0.834-1.855,1.856s0.833,1.853,1.855,1.853s1.854-0.83,1.854-1.853S14.994,12.386,13.972,12.386z M13.972,15.116c-0.484,0-0.878-0.393-0.878-0.874c0-0.484,0.394-0.878,0.878-0.878c0.482,0,0.875,0.394,0.875,0.878C14.847,14.724,14.454,15.116,13.972,15.116z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    <% } %>
+                <% }); %>
+            </div>
+        </div>
+        </section>
+
+        <section class="categories">
+          <div class="container">
+              <h2 class="section-title">Explore</h2>
+              <div class="category-grid">
+                  <% categories.forEach(function(category) { %>
+                      <a class="card" href="#<%- category.name %>">
+                          <img src="<%= category.categoryImage[0].secure_url %>" alt="<%= category.name %>" class="card-img">
+                          <div class="overlay">
+                              <h3><%= category.name.toUpperCase() %></h3>
+                          </div>
+                      </a>
+                  <% }) %>
+              </div>
+          </div>
+      </section>
+
+
+      <section class="Recentlyadded-products">
+        <h2 class="section-title">Recently Added</h2>
+        <div class="card-slider-container">
+          <div class="card-container">
+              <% products.slice(0,10).forEach(function(product) { %>
+                      <div class="card">
+                        <a href="/products/<%= product._id %>" class="image-container">
+                          <img src="<%= product.productImages[0].secure_url %>" alt="<%= product.productTitle %>" class="card-img">
+                        </a>
+                          <h3 class="card-title"><%= product.productTitle %></h3>
+                          <% if (product.offers && product.offers.length > 0 && product.offers[0]) { %>
+                              <div class="OfferTag">Offer - <%= product.offers[0].discountPercentage %>% off</div>
+                          <% } %>
+                          <div class="cardbuttoncontainer">
+                              <p class="card-price">₹ <%= product.productPrice %></p>
+                              <button class="card-button" onclick="addToCart('<%= product._id %>')">
+                                  <svg class="svg-icon" viewBox="0 0 24 24">
+                                      <path d="M17.72,5.011H8.026c-0.271,0-0.49,0.219-0.49,0.489c0,0.271,0.219,0.489,0.49,0.489h8.962l-1.979,4.773H6.763L4.935,5.343C4.926,5.316,4.897,5.309,4.884,5.286c-0.011-0.024,0-0.051-0.017-0.074C4.833,5.166,4.025,4.081,2.33,3.908C2.068,3.883,1.822,4.075,1.795,4.344C1.767,4.612,1.962,4.853,2.231,4.88c1.143,0.118,1.703,0.738,1.808,0.866l1.91,5.661c0.066,0.199,0.252,0.333,0.463,0.333h8.924c0.116,0,0.22-0.053,0.308-0.128c0.027-0.023,0.042-0.048,0.063-0.076c0.026-0.034,0.063-0.058,0.08-0.099l2.384-5.75c0.062-0.151,0.046-0.323-0.045-0.458C18.036,5.092,17.883,5.011,17.72,5.011z"></path>
+                                      <path d="M8.251,12.386c-1.023,0-1.856,0.834-1.856,1.856s0.833,1.853,1.856,1.853c1.021,0,1.853-0.83,1.853-1.853S9.273,12.386,8.251,12.386z M8.251,15.116c-0.484,0-0.877-0.393-0.877-0.874c0-0.484,0.394-0.878,0.877-0.878c0.482,0,0.875,0.394,0.875,0.878C9.126,14.724,8.733,15.116,8.251,15.116z"></path>
+                                      <path d="M13.972,12.386c-1.022,0-1.855,0.834-1.855,1.856s0.833,1.853,1.855,1.853s1.854-0.83,1.854-1.853S14.994,12.386,13.972,12.386z M13.972,15.116c-0.484,0-0.878-0.393-0.878-0.874c0-0.484,0.394-0.878,0.878-0.878c0.482,0,0.875,0.394,0.875,0.878C14.847,14.724,14.454,15.116,13.972,15.116z"></path>
+                                  </svg>
+                              </button>
+                          </div>
+                      </div>
+              <% }); %>
+          </div>
+      </div>
+      </section>
+
+
+      <% categories.forEach(function(category) { %>
+      <section class="Recentlyadded-products" id="<%- category.name %>">
+          <h2 class="eachcategory-title" ><%= category.name %></h2>
+          <div class="card-slider-container">
+            <div class="card-container">
+                <% category.products.forEach(function(product) { %>
+                        <div class="card">
+                          <a href="/products/<%= product._id %>" class="image-container">
+                            <img src="<%= product.productImages[0].secure_url %>" alt="<%= product.productTitle %>" class="card-img">
+                          </a>
+                            <h3 class="card-title"><%= product.productTitle %></h3>
+                            <% if (product.offers && product.offers.length > 0 && product.offers[0]) { %>
+                                <div class="OfferTag">Offer - <%= product.offers[0].discountPercentage %>% off</div>
+                            <% } %>
+                            <div class="cardbuttoncontainer">
+                                <p class="card-price">₹ <%= product.productPrice %></p>
+                                <button class="card-button" onclick="addToCart('<%= product._id %>')">
+                                    <svg class="svg-icon" viewBox="0 0 24 24">
+                                        <path d="M17.72,5.011H8.026c-0.271,0-0.49,0.219-0.49,0.489c0,0.271,0.219,0.489,0.49,0.489h8.962l-1.979,4.773H6.763L4.935,5.343C4.926,5.316,4.897,5.309,4.884,5.286c-0.011-0.024,0-0.051-0.017-0.074C4.833,5.166,4.025,4.081,2.33,3.908C2.068,3.883,1.822,4.075,1.795,4.344C1.767,4.612,1.962,4.853,2.231,4.88c1.143,0.118,1.703,0.738,1.808,0.866l1.91,5.661c0.066,0.199,0.252,0.333,0.463,0.333h8.924c0.116,0,0.22-0.053,0.308-0.128c0.027-0.023,0.042-0.048,0.063-0.076c0.026-0.034,0.063-0.058,0.08-0.099l2.384-5.75c0.062-0.151,0.046-0.323-0.045-0.458C18.036,5.092,17.883,5.011,17.72,5.011z"></path>
+                                        <path d="M8.251,12.386c-1.023,0-1.856,0.834-1.856,1.856s0.833,1.853,1.856,1.853c1.021,0,1.853-0.83,1.853-1.853S9.273,12.386,8.251,12.386z M8.251,15.116c-0.484,0-0.877-0.393-0.877-0.874c0-0.484,0.394-0.878,0.877-0.878c0.482,0,0.875,0.394,0.875,0.878C9.126,14.724,8.733,15.116,8.251,15.116z"></path>
+                                        <path d="M13.972,12.386c-1.022,0-1.855,0.834-1.855,1.856s0.833,1.853,1.855,1.853s1.854-0.83,1.854-1.853S14.994,12.386,13.972,12.386z M13.972,15.116c-0.484,0-0.878-0.393-0.878-0.874c0-0.484,0.394-0.878,0.878-0.878c0.482,0,0.875,0.394,0.875,0.878C14.847,14.724,14.454,15.116,13.972,15.116z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                <% }); %>
+            </div>
+        </div>
+
+        <% })%>
+      </section>
+
+
+<div id="snackbar"></div>
+      
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3 class="footer-title">sinans</h3>
+                <p>Made with <i class="fa-solid fa-heart"></i> George</p>
+            </div>
+            <div class="footer-section">
+                <h3 class="footer-title">Social Links</h3>
+                <div class="social-buttons">
+                    <a href="https://github.com/george-j00"><i class="fa-brands fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/george-jose-714151240/"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3 class="footer-title">Contact & Support</h3>
+                <ul class="footer-links">
+                    <li>George Jose</li>
+                    <li><i class="fa-brands fa-whatsapp"></i> +91 8111942818</li>
+                    <li><i class="fas fa-envelope"></i> subingeorge027@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <p class="copyright">Copyright &copy; George Jose 2023</p>
+        </div>
+
+    </footer>
+
+    <script src="../js/addToCart.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<% product.productImages.forEach((image, index) => { %>
+    <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+      <img class="d-block mx-auto" src="<%= image.secure_url %>" alt="View Product" data-toggle="modal" data-target="#imageModal" style="max-width: 100%; max-height: 60vh;">
+    </div>
+  <% }); %>
+  <div>
+    <h2 ><%= product.productTitle %></h2>
+    <p ><%= product.productDescription %></p>
+    <h3 ><span>&#8377;</span> <%= product.productPrice %></h3>
+    <p >Category: <%= product.category %></p>
+    <div>
+      <label for="quantity" >Quantity:</label>
+      <div >
+        <button >-</button>
+        <input type="number" class="form-control" product-data-id="<%= product._id %>" id="quantityInput" min="1" value="1" step="1">
+        <button type="button" id="incrementButton">+</button>
+      </div>
+    </div>
+    <button  id="addToCartBtnId">Add to Cart</button>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<div class="category-container">
+    <% categories.forEach(function(category) { %>
+        <div class="cardcont">
+            <a href="#<%= category.name.toLowerCase() %>" class="category-link">
+                <div class="category-card card">
+                    <img src="<%= category.categoryImage[0].secure_url %>" alt="<%= category.name %>" class="category-image">
+                    <h3 class="category-name"><%= category.name.toUpperCase() %></h3>
+                </div>
+            </a>
+        </div>
+    <% }) %>
+</div>

@@ -1,0 +1,50 @@
+<nav class="navbar">
+  <div class="navbar-container">
+      <!-- Logo Section -->
+      <div class="navbar-logo">
+        <i class="fa-solid fa-bag-shopping"></i>
+          <span class="site-name">Planet Ecomm</span>
+      </div>
+
+      <!-- Center Menu Section -->
+      <ul class="navbar-menu">
+          <li><a class="nav-link" href="/">HOME</a></li>
+          <li><a class="nav-link" href="/products">PRODUCTS</a></li>
+      </ul>
+
+      <!-- Right Icons Section -->
+      <div class="navbar-icons">
+          <a href="/cart" class="cart-icon">
+              <i class="fa-solid fa-bag-shopping"></i>
+              <span id="cart-count" class="cart-count">
+                  <% if (typeof cartLength !== 'undefined') { %>
+                      <%= cartLength %>
+                  <% } else { %>
+                      0
+                  <% } %>
+              </span>
+          </a>
+          <% if (typeof userId === 'undefined') { %>
+              <a href="/login" class="nav-link text-dark">
+                  <div class="text-secondary">Sign In</div>
+              </a>
+          <% } else { %>
+              <a href="/profile">
+                  <div>
+                      <i class="fa-solid fa-user"></i>
+                  </div>
+              </a>
+          <% } %>
+      </div>
+  </div>
+</nav>
+
+<!-- Bottom Navigation for Mobile -->
+<nav class="bottom-nav">
+  <ul class="bottom-nav-menu">
+      <li><a href="/"><i class="fas fa-home"></i>Home</a></li>
+      <li><a href="/products"><i class="fas fa-box"></i>Products</a></li>
+      <li><a href="/cart"><i class="fas fa-shopping-cart"></i>Cart</a></li>
+      <li><a href="/profile"><i class="fas fa-user"></i>Profile</a></li>
+  </ul>
+</nav>

@@ -1,0 +1,48 @@
+<div id="profile" class="contents">
+    <h1 class="d-flex justify-content-center">My Account</h1>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form id="profileForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="<%= userData.name %>" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="<%= userData.email %>" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                        <input type="number" class="form-control" id="phoneNumber" name="phoneNumber" value="<%= userData.phone %>" required>
+                        <p id="phoneNumberValidate" class="text-danger text-sm"></p>
+                    </div>
+                     <input type="hidden" id="userId" name="userId" value="<%= userData._id %>">
+
+                    <button type="submit" class="btn btn-dark">Update Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- <%= userData.phone %> -->
+</div>
+
+<script>
+const phoneNumber = document.getElementById('phoneNumber');
+const phoneNumberValidate = document.getElementById('phoneNumberValidate');
+
+phoneNumber.addEventListener('input',  () => {
+    if (phoneNumber.value.length >  10 ) {
+        phoneNumber.value = pincode.value.slice(0, 10);
+        phoneNumber.disable = true;
+        phoneNumberValidate.textContent = "Enter correct phone number"
+    }else{
+        phoneNumber.disable = false;
+        phoneNumberValidate.textContent = ""
+    }
+})
+</script>
+
+<script src="../js/profileForm.js"></script>

@@ -1,0 +1,150 @@
+<div id="category-content" class="contents">
+   
+    <button type="button" class="ml-auto mr-5 btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">
+        <i class="fa-solid fa-plus"></i> Add Category
+    </button>
+
+
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editProductModalLabel">Add Category</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="categoryForm" enctype="multipart/form-data">
+                <div id="catId" class="mb-3">
+                  <label for="productTitle" class="form-label">Category Name</label>
+                  <input type="text" class="form-control" id="categoryName" name="categoryName" required>
+                </div>
+                <div class="mb-3">
+                  <label for="productImage" class="form-label">Category Image</label>
+                  <input type="file" class="form-control" id="categoryImage" name="categoryImage" accept="image/*" required multiple>
+                </div>
+                
+                <div id="succesId" style="display: none;"><h2>Success</h2></div>
+
+                <p id="categoryError"></p>
+                <button type="submit" class="btn btn-success">Add Category</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="table-responsive mt-5">
+        <table class="table table-light">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">No.</th>
+              <th scope="col">Category Id</th>
+              <th scope="col">Category Name</th>
+              <th scope="col">Offer</th>
+              <th scope="col">Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% categories.forEach((category, index) => { %>
+              <tr>
+                <td scope="row"><%= index + 1 %></td>
+                <td><%= category._id %></td>
+                <td><%= category.name %></td>
+                <td>
+                  <% console.log(category.name) %>
+
+                  <!-- Category Offer Button -->
+<button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#categoryOfferModal">
+  Add Offer
+</button>
+
+<!-- Category Offer Modal -->
+<div class="modal fade" id="categoryOfferModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Offer Management</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="categoryOfferForm">
+          <div class="form-group">
+            <label for="offerName2">Offer Name</label>
+            <input type="text" class="form-control" id="offerName2" name="offerData.offerName" placeholder="Enter offer name" required>
+          </div>
+          <div class="form-group">
+            <label for="discountPercentage2">Discount Percentage (%)</label>
+            <input type="number" class="form-control" id="discountPercentage2" name="offerData.discountPercentage" placeholder="Enter discount percentage" required>
+          </div>
+          <div class="form-group">
+            <label for="startDate2">Start Date</label>
+            <input type="date" class="form-control" id="startDate2" name="offerData.startDate" required>
+          </div>
+          <div class="form-group">
+            <label for="endDate2">End Date</label>
+            <input type="date" class="form-control" id="endDate2" name="offerData.endDate" required>
+            <input type="hidden" class="form-control" id="offerCategory" name="offerCategory" value="<%= category.name %>">
+
+          </div>
+          <button type="submit" id="addOfferBtn2" class="btn btn-primary">Apply Offer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+                </td>
+                <td>
+                  <button type="button" onclick="deleteCategory('<%= category.name %>','<%= category._id %>')" class="btn btn-danger" id="deleteCategory">
+                 Remove Category
+                  </button>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+</div>
+
+
+<div class="modal fade" id="categoryOfferSuccess" tabindex="-1" aria-labelledby="categoryOfferSuccess" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Offer added to the category Successfully </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete Category</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <p> Are you sure you want to delete the category ?</p>
+       <button type="button" id="modalDeleteCategoryBtn" class="btn btn-danger ml-4 mt-1 btn-logout">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="modal fade" id="deleteCategorySuccess" tabindex="-1" aria-labelledby="deleteCategorySuccess" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Category deleted Successfully </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../js/categoryOffer.js"></script>
+<script src="../js/category.js"></script>
