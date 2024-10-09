@@ -1,21 +1,658 @@
-<% product.productImages.forEach((image, index) => { %>
-    <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-      <img class="d-block mx-auto" src="<%= image.secure_url %>" alt="View Product" data-toggle="modal" data-target="#imageModal" style="max-width: 100%; max-height: 60vh;">
-    </div>
-  <% }); %>
-  <div>
-    <h2 ><%= product.productTitle %></h2>
-    <p ><%= product.productDescription %></p>
-    <h3 ><span>&#8377;</span> <%= product.productPrice %></h3>
-    <p >Category: <%= product.category %></p>
-    <div>
-      <label for="quantity" >Quantity:</label>
-      <div >
-        <button >-</button>
-        <input type="number" class="form-control" product-data-id="<%= product._id %>" id="quantityInput" min="1" value="1" step="1">
-        <button type="button" id="incrementButton">+</button>
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/header');%>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<body>
+  <div class="fixed">
+    <%- include('../partials/navbar');%>
+  </div>
+  
+  <section class=" py-3">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-8 col-lg-8 mb-4">
+          <!-- <div class="card mb-4 border shadow-0 p-4">
+                    <h4 class="text-center mb-3">Express Checkout</h4>
+                    <button class="btn btn-light btn-block">Google Pay</button>
+                 </div> -->
+          
+<!-- ******** ADDRESS SECTION ************  -->
+       <div class="border p-4 mb-4">
+        <h4 class="d-flex justify-content-center">Select Address</h4>
+        <% if (userCart.user.addresses.length >= 3 ) { %>
+          <button class=" btn btn-secondary mb-3 d-flex ml-auto ">Reached address limit </button>
+          
+        <% } else { %>
+          <button class=" btn btn-dark mb-3 d-flex ml-auto " data-bs-toggle="modal" data-bs-target="#addAddressModal"> <i class="fa-solid fa-plus pr-3 pt-1"></i>Add Address </button>
+      
+        <% } %>
+        <div class=" d-flex flex-row">
+          <% userCart.user.addresses.forEach((address, index) => { %>
+            <div class="col-md-4 mb-4">
+              <div class="addressCard p-3 select-address-card" data-user-id="<%= userCart.user._id %>"  data-address-id="<%= address._id %>">
+                <div class="d-flex flex-column">
+                  <h6 class="text-center mb-2"><strong>Address <%= index + 1 %></strong></h6>
+                  <p class="mb-2"><strong>Name: </strong><%= userCart.user.name %></p>
+                  <p class="mb-2"><strong>Country: </strong><%= address.country %></p>
+                  <p class="mb-2"><strong>Street Address: </strong><%= address.streetAddress %></p>
+                  <p class="mb-2"><strong>City: </strong><%= address.city %></p>
+                  <p class="mb-2"><strong>State: </strong><%= address.state %></p>
+                  <p class="mb-2"><strong>Pincode: </strong><%= address.pincode %></p>
+                  <div class="mt-auto">
+                    <button id="editAddressBtn" class="btn edit-address-btn" data-bs-toggle="modal" data-bs-target="#editAddressModal" data-address-id="<%= address._id %>"><i class="fa-solid fa-pencil"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+          
+          <div class="modal fade" id="editAddressSuccessModal" tabindex="-1" role="dialog" aria-labelledby="editAddressSuccessModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editAddressSuccessModalLabel">Success!</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Your address has been successfully updated.
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+
+         <!-- user add address form -->
+     <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addAddressModalLabel">Add Address</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form id="userAddAddressForm">
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" value="<%= userCart.user.name %>" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="country" class="form-label">Country</label>
+                    <input type="text" class="form-control" id="country" name="country" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="streetAddress" class="form-label">Street Address</label>
+                    <input type="text" class="form-control" id="streetAddress" name="streetAddress" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" class="form-control" id="city" name="city" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="state" class="form-label">State</label>
+                    <input type="text" class="form-control" id="state" name="state" required>
+                  </div>
+                  <div class="mb-3">
+                      <label for="pincode" class="form-label">Pincode</label>
+                      <input type="number" class="form-control" id="pincode" name="pincode" required >
+                      <p id="pincodeValidate" class="text-danger"></p>
+                    </div>
+
+                  <input type="hidden" id="userId" name="userId" value="<%= userCart.user._id %>">
+  
+                  <button type="submit" class="btn btn-dark">Add Address</button>
+                </form>
+          </div>
+        </div>
       </div>
     </div>
-    <button  id="addToCartBtnId">Add to Cart</button>
-  </div>
+
+          <div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editAddressModalLabel">Edit Address</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editAddressForm">
+                            <div class="mb-3">
+                                <label for="editName" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="editName" name="editName" value="<%= userCart.user.name %>" required disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editCountry" class="form-label">Country</label>
+                                <input type="text" class="form-control" id="editCountry" name="editCountry" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editStreetAddress" class="form-label">Street Address</label>
+                                <input type="text" class="form-control" id="editStreetAddress" name="editStreetAddress" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editCity" class="form-label">City</label>
+                                <input type="text" class="form-control" id="editCity" name="editCity" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editState" class="form-label">State</label>
+                                <input type="text" class="form-control" id="editState" name="editState" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editPincode" class="form-label">Pincode</label>
+                                <input type="number" class="form-control" id="editPincode" name="editPincode" required>
+                                <p id="editPincodeValidate" class="text-danger"></p>
+                            </div>
+                            <input type="hidden" id="editUserId" name="editUserId" value="<%= userCart.user._id %>">
+          
+                            <input type="hidden" id="editAddressId" name="editAddressId" value="<%= userCart.user._id %>">
+                            
+                            <button type="submit" id="editAddressSubmitBtn" class="btn btn-dark">Update Address</button>
+    
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+          </div>
+       </div>
+
+<!-- ************ END OF ADDRESS SECTION ********* -->
+       <hr>
+<!-- ************  PAYMENT  ********* -->
+
+<div class="border p-4 mb-4">
+      <div class="col-lg-12">
+         <div class="card">
+          <div class="card-header bg-light">
+              <ul class="nav nav-pills rounded nav-fill">
+
+                  <li class="nav-item ">
+                      <a data-toggle="pill" href="#credit-card" class="nav-link text-dark active btn btn-dark">
+                          <i class="fas fa-mobile-alt mr-2"></i> Online
+                      </a>
+                  </li>
+              
+                  <li class="nav-item">
+                      <a data-toggle="pill" href="#COD"  class="nav-link text-dark btn btn-dark">
+                        <i class="fa-solid fa-money-bill-transfer"></i> COD
+                      </a>
+                  </li>
+
+              </ul>
+          </div>
+          <div class="card-body">
+              <div class="tab-content">
+
+                  <!-- ****** CARD  ****** -->
+                  <div id="credit-card" class="tab-pane fade show active">
+                    <form role="form">
+                       <!-- Display the wallet balance -->
+                       <p>Wallet Balance: ₹<span id="walletBalance"><%= walletBalance %></span></p>
+                        <div class="form-group">
+                            <label for="useWallet">Use Wallet Balance:</label>
+                            <input type="radio" id="useWallet" name="useWallet" value="yes"> Yes
+                            <input type="radio" id="useWallet" name="useWallet" value="no" checked> No
+                        </div>
+                        <button type="button" class="subscribe btn btn-dark btn-block shadow-sm confrimPayementBtn">Confirm Payment</button>
+                    </form>
+                </div>
+                
+                  <!-- ****** END OF CARD  ****** -->
+
+                  <!-- ****** COD ****** -->
+                  <div id="COD" class="tab-pane fade pt-3">
+                    <form role="form">
+                      <div class="form-group">
+                          <!-- <label for="username">Card Owner</label>
+                          <input type="text" name="username" placeholder="Card Owner Name" required class="form-control"> -->
+                      </div>
+                      <button type="button" class="subscribe btn btn-dark btn-block shadow-sm confrimPayementBtn">Confirm Payment</button>
+                    </form>
+                  </div>
+                  <!-- ****** END OF  COD ****** -->
+
+              </div>
+          </div>
+           </div>
+      </div>
 </div>
+<!-- ************  END OF PAYMENT SECTION  ********* -->
+</div>
+
+        <!-- right side section -->
+        <div class="col-xl-4 col-lg-4 d-flex justify-content-center justify-content-lg-end mt-4">
+          <div class="ms-lg-4 mt-4 mt-lg-0" style="max-width: 320px;">
+            <h6 class="mb-3">Order Summary</h6>
+           
+            <div class="d-flex flex-column border p-4">
+              <div class="mb-3">
+                <input type="radio" class="shipping" name="shipping" id="checkoutFreeShipping" value="FreeShipping" checked>
+                <label for="chekoutFreeShipping" class="ml-2 ">Free Shipping</label>
+              </div>
+              <div class="mb-3">
+                <input type="radio" class="shipping" name="shipping" id="checkoutExpressShipping" value="express">
+                <label for="checkoutExpressShipping" class="ml-2">Express Shipping (+15)</label>
+              </div>
+              <div class="d-flex flex-row justify-content-between mb-2">
+                <p class="mb-0">Subtotal</p>
+                <p class="mb-0" id="checkoutSubTotal">₹0.00</p>
+              </div>
+              <div class="d-flex flex-row justify-content-between mb-2">
+                <p class="mb-0 text-danger">Total Discount</p>
+                <p class="mb-0 text-danger" id="discountCouponId">- 0.00</p>
+              </div>
+              <div class="d-flex flex-row justify-content-between mb-3">
+                <p class="mb-0">Total</p>
+                <p class="mb-0" id="checkoutTotal">₹0.00</p>
+              </div>
+            </div>
+
+            <div class="availableCoupons mt-2">
+              <p class="font-weight-bold">Available Coupons</p>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Coupon Code</th>
+                    <th>Discount</th>
+                    <th>Min Purchase</th>
+                    <th>Max Purchase</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% validCoupons.forEach(coupon => { %>
+                    <tr>
+                      <td><%= coupon.couponCode %></td>
+                      <td>₹<%= coupon.discountAmount %></td>
+                      <td>₹<%= coupon.minPurchase %></td>
+                      <td>₹<%= coupon.maxPurchase %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+            
+                <div class="couponcontainer" id="couponSection">
+                  <div class="d-flex flex-column mr-5" >
+                    <div class="input-group mt-3 mb-4">
+                      <p class="mb-1">Have a coupon?</p>
+                      <p class="text-secondary mb-2">Add your code for an instant discount</p>
+                      <input type="text" class="form-control border" id="couponCode" name="" placeholder="Have a code" />
+                      <button class="btn btn-light text-primary border" id="couponApplyBtn">Apply</button>
+                      <p class="text-danger" id="couponError">Unable to apply coupon code or invalid coupon</p>
+                      <p class="text-danger" id="minCouponError"> Min amount needed to apply the coupon</p>
+                    </div>
+                  </div>
+                </div>
+                       
+            <hr />
+            <h6 class="text-dark my-4">Items in cart</h6>
+            
+            <% userCart.cartItems.forEach((cartItem, index) => { %>
+          
+              <div class="d-flex align-items-center mb-4">
+                <div class="me-3 position-relative">
+                  <span class="dataQuantity position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary" >
+                    <%= cartItem.quantity %>
+                  </span>
+                  <img src="<%= cartItem.product.productImages[0].secure_url %>" style="max-height: 96px; min-height: 96px; min-width: 96px; max-width: 96x;" class="img-sm rounded border" />
+                </div>
+                <div class="">
+                  <a href="#" class="nav-link">
+                    <%= cartItem.product.productTitle %>
+                  </a>
+                  <% if (typeof cartItem.product.offers[0] !== 'undefined') { %>
+                    <% const discountPercentage = cartItem.product.offers[0].discountPercentage; %>
+                    <% const subtotal = (cartItem.quantity * cartItem.product.productPrice).toFixed(2); %>
+                    <% const discountAmount = (subtotal * (discountPercentage / 100)).toFixed(2); %>
+                    <div class="price text-muted dataSubtotal">Total: ₹<%= subtotal %></div>
+                    <div class="price text-muted dataDiscount">Discount: ₹<%= discountAmount %></div>
+                    <div class="price text-muted ">Subtotal: ₹<%= (subtotal - discountAmount).toFixed(2) %></div>
+                  <% } else { %>
+                    <div class="price text-muted dataSubtotal">Total: ₹<%= (cartItem.quantity * cartItem.product.productPrice).toFixed(2) %></div>
+                  <% } %>
+                  
+                </div>
+              </div>
+              <p class="hidden checkoutProductData" data-product-id="<%= cartItem.product._id %>" data-product-price="<%= cartItem.product.productPrice %>" data-quantity="<%= cartItem.quantity %>"></p>
+
+            <% }); %>
+
+
+           
+          
+          </div>
+        </div>
+        <!-- end of right side section -->
+
+
+      </div>
+    </div>
+  </section>
+
+  <div class="modal fade" id="selectAddress" tabindex="-1" aria-labelledby="selectAddress" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Please Select Address</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/coupon.js"></script>
+  <script src="../js/orders.js"></script>
+  <script src="../js/addUserAddress.js"></script>
+  <script src="../js/checkout.js"></script>
+  <script src="../js/updateAddress.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+</body>
+</html>
+
+
+
+
+/* items in cart *//* General Styles */
+/* General Styles */
+.itemsincart {
+    margin: 30px;
+  }
+  
+  .itemsincart h6 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  /* Item Container */
+  .item-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .image-container {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 20px;
+  }
+  
+  .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  /* Quantity Badge */
+  .quantity-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #ff5722;
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+  
+  /* Details Container */
+  .details-container {
+    flex: 1;
+    margin-left: 15px;
+  }
+  
+  .product-link {
+    font-size: 1.1rem;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .product-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Price and Discount */
+  .price {
+    margin-top: 5px;
+  }
+  
+  .original-price {
+    font-weight: bold;
+    color: #999;
+    text-decoration: line-through;
+    margin-right: 10px;
+  }
+  
+  .discounted-price {
+    font-weight: bold;
+    color: #28a745;
+    font-size: 1.1rem;
+  }
+  
+  /* Hidden Elements */
+  .hidden {
+    display: none;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+  
+    .details-container {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  
+    .image-container {
+      width: 80px;
+      height: 80px;
+    }
+    .item-container {
+        padding: 0;
+
+      }
+  }
+  
+ /* From Uiverse.io by R1SH4BH81 */ 
+/* Body */
+.container {
+    display: grid;
+    grid-template-columns: auto;
+    gap: 0px;
+  }
+  
+  hr {
+    height: 1px;
+    background-color: #2e2e2e; /* Dark gray line */
+    border: none;
+  }
+  
+  .card {
+    width: 400px;
+    background: #fff; /* Dark background for a professional look */
+    box-shadow:
+      0px 187px 75px rgba(0, 0, 0, 0.01),
+      0px 105px 63px rgba(0, 0, 0, 0.05),
+      0px 47px 47px rgba(0, 0, 0, 0.09),
+      0px 12px 26px rgba(0, 0, 0, 0.1),
+      0px 0px 0px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    width: 100%;
+    height: 40px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    border-bottom: 1px solid #2e2e2e; /* Dark gray */
+    font-weight: 700;
+    font-size: 11px;
+    color: #000; /* White text */
+  }
+  
+  /* Cart */
+  .cart {
+    border-radius: 19px 19px 0px 0px;
+  }
+  
+  .cart .steps {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .cart .steps .step {
+    display: grid;
+    gap: 10px;
+  }
+  
+  .cart .steps .step span {
+    font-size: 13px;
+    font-weight: 600;
+    color: #000; /* White text */
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  .cart .steps .step p {
+    font-size: 11px;
+    font-weight: 600;
+    color: #333; /* Light gray text */
+  }
+  
+  /* Promo */
+  .promo form {
+    display: grid;
+    grid-template-columns: 1fr 80px;
+    gap: 10px;
+    padding: 0px;
+  }
+  
+  .input_field {
+    width: auto;
+    height: 36px;
+    padding: 0 0 0 12px;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #2e2e2e; /* Dark gray */
+    background-color: #f2f2f2; /* Dark input background */
+    color: #000; /* White text */
+    transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
+  }
+  
+  .input_field:focus {
+    border: 1px solid transparent;
+    box-shadow: 0px 0px 0px 2px #555555; /* Light gray focus */
+    background-color: #f2f2f2;
+  }
+  
+  .promo form button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 18px;
+    gap: 10px;
+    width: 100%;
+    height: 36px;
+    background: #555555; /* Medium gray button */
+    box-shadow:
+      0px 0.5px 0.5px #555555,
+      0px 1px 0.5px rgba(239, 239, 239, 0.5);
+    border-radius: 5px;
+    border: 0;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 15px;
+    color: #000; /* White text */
+    transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
+  }
+  
+  /* Checkout */
+  .payments .details {
+    display: grid;
+    grid-template-columns: 10fr 1fr;
+    padding: 0px;
+    gap: 5px;
+  }
+  
+  .payments .details span:nth-child(odd) {
+    font-size: 12px;
+    font-weight: 600;
+    color: #000; /* White text */
+  }
+  
+  .payments .details span:nth-child(even) {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333; /* Light gray text */
+  }
+  
+  .checkout .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 10px 10px 20px;
+    background-color: #f9f9f9; /* Dark gray background */
+  }
+  
+  .price {
+    font-size: 22px;
+    color: #333; /* White text */
+    font-weight: 900;
+  }
+  
+  .checkout .checkout-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 36px;
+    background: #555555; /* Medium gray button */
+    border-radius: 7px;
+    border: 1px solid #2e2e2e; /* Dark gray border */
+    color: #000; /* White text */
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
+  }
+  
+  .checkout .checkout-btn:hover {
+    background-color: #777777; /* Slightly lighter gray on hover */
+  }
+  
+  .checkoutcard{
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+  }
+
+  .addadressbtn{
+    float: right;
+    width: 150px;
+    height: 20px;
+    background: #555555; /* Medium gray button */
+    border-radius: 7px;
+    border: 1px solid #2e2e2e; /* Dark gray border */
+    color: #fff; /* White text */
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
+  }

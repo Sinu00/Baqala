@@ -2,7 +2,7 @@
 const userAddAddressForm = document.getElementById('userAddAddressForm');
 const pincode = document.getElementById('pincode');
 const pincodeValidate = document.getElementById('pincodeValidate');
-const addAddressModal = document.getElementById('addAddressModal');
+
 // const addressCount = document.getElementById('addressCount');
 
 userAddAddressForm.addEventListener('submit', async (event) => {
@@ -35,10 +35,11 @@ const userId = document.getElementById('userId').value;
        })
 
        if (response.ok) {
-        alert('address added successfully');
+        showToast("New Address Added")
         window.location.reload();
     }
   } catch (error) {
+    showToast("Sorry! Some Error Occured")
     console.error('Error:', error);
   }
 });

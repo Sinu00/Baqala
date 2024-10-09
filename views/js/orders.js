@@ -203,6 +203,7 @@ function getPaymentDetails(){
 
 async function sendOrderData() {
   try {
+    console.log("orderDATA:hhhhhhhh" + orderData);
     const response = await fetch('/place-order', {
       method: 'POST',
       headers: {
@@ -212,6 +213,7 @@ async function sendOrderData() {
     });
 
     const responseData = await response.json();
+    console.log("ResponseData:hhhhhhhhhhhhhh"+responseData)
     return responseData;
   } catch (error) {
     throw error;

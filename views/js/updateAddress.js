@@ -7,8 +7,9 @@ const editAddressId = document.getElementById('editAddressId');
 
 editAddressBtns.forEach((editAddressBtn) => {
     editAddressBtn.addEventListener('click',  () => {
+      console.log("clicked");
         const addressId = editAddressBtn.getAttribute('data-address-id');
-
+        console.log("address:"+ addressId);
         // console.log(addressId , 'adddddad');
 
         editAddressId.value = addressId
@@ -16,11 +17,19 @@ editAddressBtns.forEach((editAddressBtn) => {
        fetch(`/profile/update-address/${addressId}`)
        .then(res => res.json())
        .then(data => {
-       
-        openModal(data);
+      openModal1('editAddressModal') 
+      openModal(data);
        })
     });
 });
+
+function openModal1(modalId) {
+  document.getElementById(modalId).style.display = "flex";
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = "none";
+}
 
 function openModal(data) {
     document.getElementById('editCountry').value = data.country;
@@ -43,35 +52,31 @@ editAddressForm.addEventListener('submit', async (event) => {
     const pincode = document.getElementById('editPincode').value;
     const userId = document.getElementById('editUserId').value;
     const editAddressId = document.getElementById('editAddressId').value;
-    
+
     const response = await fetch(`/profile/update-address`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({name, country, streetAddress, city,state ,pincode ,userId ,editAddressId})    
+      body: JSON.stringify({name, country, streetAddress, city,state ,pincode ,userId ,editAddressId})   
     });
 
     if (response.ok) {
-      alert('Address updated successfully')
+      showToast('Address updated successfully')
       window.location.reload();
     }
   } catch (error) {
     console.error('Error:', error);
-    // Handle errors here
+    showToast('Sorry Something Went Wrong')
   }
 });
 
 //delete address
 deleteAddressBtns.forEach((deleteAddressBtn) => {
   deleteAddressBtn.addEventListener('click',  () => {
+    console.log("clicked");
     const addressId = deleteAddressBtn.getAttribute('data-address-id');
-    const deleteAddressModal = new bootstrap.Modal(document.getElementById('deleteAddressModal'));
-    const modalDeleteAddressBtn = document.getElementById('modalDeleteAddressBtn');
-    deleteAddressModal.show();
-    modalDeleteAddressBtn.addEventListener('click', () => {
-      deleteAddress(addressId);
-  });
+    deleteAddress(addressId);
   });
 });
  
@@ -85,7 +90,19 @@ function deleteAddress(addressId){
  })
  .then((response) => {
    if (response.ok) {
+    showToast("Deleted");
      window.location.reload();
    }
  })
 }
+
+function showToast( message) {
+  var x = document.getElementById("snackbar");
+  x.textContent =  message; // Set the toast message
+  x.classList.add("show");
+  
+  // Hide the toast after 3 seconds
+  setTimeout(function() {
+  x.classList.remove("show");
+  }, 3000);
+  }
