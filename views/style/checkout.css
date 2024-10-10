@@ -112,7 +112,7 @@ z-index: 1000;
 .seladdsec {
   display: flex;
   justify-content: center;
-  margin: 10px;
+  margin: 80px 10px 10px 10px;
 }
 
 /* New styles for address layout */
