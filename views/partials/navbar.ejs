@@ -38,7 +38,22 @@
       </div>
   </div>
 </nav>
+<script>
+    // Get all the bottom nav menu items
+const bottomNavLinks = document.querySelectorAll('.bottom-nav-menu a');
 
+// Loop through each link and add click event listener
+bottomNavLinks.forEach(link => {
+    link.addEventListener('click', function() {
+        // Remove the 'active' class from all links
+        bottomNavLinks.forEach(link => link.classList.remove('active'));
+        
+        // Add the 'active' class to the clicked link
+        this.classList.add('active');
+    });
+});
+
+</script>
 <!-- Bottom Navigation for Mobile -->
 <nav class="bottom-nav">
   <ul class="bottom-nav-menu">

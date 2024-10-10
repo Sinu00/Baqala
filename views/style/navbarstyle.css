@@ -95,6 +95,31 @@
     padding: 0;
 }
 
+/* Active state for the bottom nav bar */
+.bottom-nav-menu a.active, 
+.bottom-nav-menu a:hover {
+    color: #007bff; /* Change the color to indicate active state */
+}
+
+.bottom-nav-menu a.active i, 
+.bottom-nav-menu a:hover i {
+    color: #007bff; /* Change the icon color to match the active state */
+}
+
+.bottom-nav-menu a.active {
+    font-weight: bold; /* Make the active link text bold */
+}
+
+.bottom-nav-menu a.active:before {
+    content: '';
+    display: block;
+    width: 5px;
+    height: 5px;
+    background-color: #007bff; /* Indicator color */
+    border-radius: 50%;
+    margin: 2px auto; /* Center the indicator below the icon */
+}
+
 .bottom-nav-menu a {
     text-decoration: none;
     color: #333;
