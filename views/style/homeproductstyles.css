@@ -260,7 +260,7 @@ body {
   /* Position for smaller screens (mobile devices) */
   @media (max-width: 767px) {
     #snackbar {
-      top: 20px;
+      top: 80px;
       left: 50%;
       transform: translateX(-50%);
     }
