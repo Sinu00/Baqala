@@ -12,35 +12,210 @@
 <body>
   <%- include('../partials/navbar'); %>
   <main>
-    <section>
-      <div class="header">
-        <button class="back-button">&larr;</button>
-        <span>Cart</span>
-        <span class="coupons">Coupons</span>
+<!-- heading section -->
+<section>
+  <div class="header">
+    <button class="back-button">&larr;</button>
+    <span>Cart</span>
+    <span class="coupons">Coupons</span>
+  </div>
+</section>
+<section class="seladdsec">
+  <div class="dropdown-container">
+    <button class="dropdown-toggle" onclick="toggleDropdown()">Select an address</button>
+    <div class="dropdown-menu" id="addressDropdown">
+      <% if (userCart.user.addresses.length >= 3) { %>
+        <button class="addadressbtn" disabled>Reached address limit</button>
+      <% } else { %>
+        <button class="addadressbtn" onclick="openModal1('addAddressModal')">
+          <i class="fa-solid fa-plus pr-3 pt-1"></i>Add Address
+        </button>
+      <% } %>
+      <form id="addressForm">
+        <% userCart.user.addresses.forEach((address, index) => { %>
+          <div class="dropdown-item addressCard" data-address-id="<%= address.id %>" data-user-id="<%= userCart.user._id %>">
+            <input 
+              type="radio" 
+              name="selectedAddress" 
+              id="address<%= index %>" 
+              value="<%= address.id %>" 
+              onclick="selectAddress(this)"
+            />
+            <label for="address<%= index %>">
+              <p class="address-number">Address: <%= index + 1 %></p>
+              <p class="user-name"><%= userCart.user.name %></p>
+              <p class="country"><%= address.country %></p>
+              <p class="street-address"><%= address.streetAddress %></p>
+              <p class="city"><%= address.city %></p>
+              <p class="state"><%= address.state %></p>
+              <p class="pincode"><%= address.pincode %></p>
+            </label>
+          </div>
+          <button class="edit-address-btn" data-address-id="<%= address.id %>">Edit</button>
+          <button class="delete-address-btn" data-address-id="<%= address.id %>">Delete</button>
+        <% }) %>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+
+
+        <!-- products in cart section -->
+        <section>
+          <div class="productlistcontainer">
+            <h3>Items in cart</h3>
+            <% userCart.cartItems.forEach((cartItem, index) => { %>
+
+              <div class="productlistcard checkoutProductData" data-product-id="<%= cartItem.product._id %>"
+                data-product-price="<%= cartItem.product.productPrice %>" data-quantity="<%= cartItem.quantity %>">
+                <div>
+                  <h3><%= cartItem.product.productTitle %> </h3>
+                  <p><%= cartItem.product.category %></p>
+                </div>
+                <div class="price-container">
+                  <% 
+                    const originalPrice = cartItem.product.productPrice;
+                    let discountedPrice = originalPrice;
+                    if (cartItem.product.productHasDiscount && cartItem.product.offers.length > 0) {
+                       const discountPercentage = cartItem.product.offers[0].discountPercentage; 
+                        const subtotal = (cartItem.quantity * cartItem.product.productPrice).toFixed(2); 
+                        const discountAmount = (subtotal * (discountPercentage / 100)).toFixed(2); 
+                      discountedPrice = originalPrice - (originalPrice * (discountPercentage / 100));
+                    }
+                  %>
+                  <% if (discountedPrice < originalPrice) { %>
+                    <p class="original-price" style="text-decoration: line-through;">
+                      $<%= originalPrice.toFixed(2) %>
+                      <div class="price text-muted dataSubtotal">Total: ₹<%= subtotal %></div>
+                      <div class="price text-muted dataDiscount">Discount: ₹<%= discountAmount %></div>
+                      <div class="price text-muted ">Subtotal: ₹<%= (subtotal - discountAmount).toFixed(2) %></div>
+                    </p>
+                    <p class="discounted-price">
+                      $<%= discountedPrice.toFixed(2) %>
+                    </p>
+                  <% } else { %>
+                    <p class="price">
+                      $<%= originalPrice.toFixed(2) %>
+                    </p>
+                  <% } %>
+                  <div class="price text-muted dataSubtotal">Total: ₹<%= (cartItem.quantity * cartItem.product.productPrice).toFixed(2) %></div>
+                </div>
+              </div>
+            <% }); %>
+            <button class="add-more-items">+ Add more items</button>
+          </div>
+        </section>
+    
+    
+    <!-- coupon code section -->
+     <section>
+       <div class="availablecouponlist">
+          <h3>Available Coupons</h3>
+          <div class="scrollablecoupon">
+      <% if(validCoupons.length){ %>
+        <% validCoupons.forEach(coupon => { %>
+          <div class="couponcards">
+            <h4>AED <%= coupon.discountAmount %> OFF</h4>
+            <div>
+              <p>Apply <b><%= coupon.couponCode %> </b> To get AED<%= coupon.discountAmount %> off</p>
+              <p><small><b>Conditon:</b><i> Min Amount: AED <%= coupon.minPurchase %> And Max Amount: AED <%= coupon.maxPurchase %></i></small> </p>
+            </div>  
+          </div>
+        <%})%>
+      <%}else{%>
+        <div class="nocouponcard">
+          <h4 class="nocoupontext"> CURRENTLY NO COUPONS AVAILABLE </h4>
+        </div>
+      <%} %>
+    </div>
+
+      <div class="coupon-section" id="couponSection">
+        <div class="coupon-input-group">
+          <input type="text" id="couponCode" placeholder="Enter coupon code" required>
+          <button type="submit" id="couponApplyBtn">Apply Coupon</button>
+        </div>
+        <div id="couponError" class="error-message" style="display: none;"></div>
+        <div id="minCouponError" class="error-message" style="display: none;"></div>
       </div>
-    </section>
-    <section class="seladdsec">
-      <div class="dropdown-container">
-        <button class="dropdown-toggle" onclick="toggleDropdown()">Select an address</button>
-        <div class="dropdown-menu" id="addressDropdown">
-          <% if (userCart.user.addresses.length >= 3 ) { %>
-            <button class="addadressbtn" disabled>Reached address limit</button>
-          <% } else { %>
-            <button class="addadressbtn" onclick="openModal1('addAddressModal')">
-              <i class="fa-solid fa-plus pr-3 pt-1"></i>Add Address
-            </button>
-          <% } %>
-          <% userCart.user.addresses.forEach((address, index) => { %>
-            <div class="dropdown-item" onclick="selectAddress(this)">
-              <p>Address: <%= index + 1 %> | <%= userCart.user.name%> | <%= address.country %> | <%= address.streetAddress %></p>
-            </div>
-            <button class="edit-address-btn" data-address-id="<%= address.id %>">Edit</button>
-            <button class="delete-address-btn" data-address-id="<%= address.id %>">Delete</button>
-          <% }) %>
+      
+      
+    </div>
+     </section>
+
+<!-- payment method section -->
+<section>
+  <div class="payment-method-section">
+    <h3>Payment Method</h3>
+    <ul class="nav nav-tabs" id="paymentTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="cod-tab" data-bs-toggle="tab" data-bs-target="#COD" type="button" role="tab" aria-controls="COD" aria-selected="true" href="#COD">Cash on Delivery</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="wallet-tab" data-bs-toggle="tab" data-bs-target="#Wallet" type="button" role="tab" aria-controls="Wallet" aria-selected="false">Wallet</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="online-tab" data-bs-toggle="tab" data-bs-target="#Online" type="button" role="tab" aria-controls="Online" aria-selected="false">Online Payment</button>
+      </li>
+    </ul>
+    <div class="tab-content" id="paymentTabsContent">
+      <div class="tab-pane fade show active" id="COD" role="tabpanel" aria-labelledby="cod-tab">
+        <p>Pay with cash upon delivery. Additional charges may apply.</p>
+      </div>
+      <div class="tab-pane fade" id="Online" role="tabpanel" aria-labelledby="online-tab">
+        <p>Proceed with online payment options.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="order-summary">
+    <h3>Order Summary</h3>
+    <div>
+      <input type="radio" class="shipping" name="shipping" id="checkoutFreeShipping" value="free" checked>
+      <label for="checkoutFreeShipping">Free Shipping</label>
+    </div>
+    <div>
+      <input type="radio" class="shipping" name="shipping" id="checkoutExpressShipping" value="express">
+      <label for="checkoutExpressShipping">Express Shipping (+₹15)</label>
+    </div>
+<div class="subtotal-container">
+  <p>Subtotal: <span id="checkoutSubTotal">₹0.00</span></p>
+  <p>Total: <span id="checkoutTotal">₹0.00</span></p>
+  <p>Discount: <span id="discountCouponId">- 0.00</span></p>
+  <button type="button" class="confrimPayementBtn">Confirm Payment</button>
+  </div>
+</div>
+
+  <!-- Display the wallet balance -->
+  <p>Wallet Balance: ₹<span id="walletBalance"><%= walletBalance %></span></p>
+   <div class="form-group">
+       <label for="useWallet">Use Wallet Balance:</label>
+       <input type="radio" id="useWallet" name="useWallet" value="yes"> Yes
+       <input type="radio" id="useWallet" name="useWallet" value="no" checked> No
+
+   </div>
+
+  </div>   
+</section>
+
+
+  <!-- Modal for address selection reminder -->
+  <div class="modal fade" id="selectAddress" tabindex="-1" aria-labelledby="selectAddressLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="selectAddressLabel">Select Address</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Please select an address before confirming payment.
         </div>
       </div>
-    </section>
-    
+    </div>
+  </div>
 
     <!-- Add Address Modal -->
     <div class="modal" id="addAddressModal">
@@ -68,7 +243,6 @@
       </div>
     </div>
 
-    <!-- Edit Address Modal -->
 <!-- Edit Address Modal -->
 <div class="modal" id="editAddressModal">
   <div class="modal-content">
@@ -116,17 +290,22 @@
   </main>
 
   <script>
-    // Toggle the dropdown
-    function toggleDropdown() {
+        // Toggle the dropdown
+        function toggleDropdown() {
       document.getElementById("addressDropdown").classList.toggle("show");
     }
 
-    // Select an address from the dropdown
-    function selectAddress(element) {
-      document.querySelector(".dropdown-toggle").textContent = element.textContent;
-      document.getElementById("addressDropdown").classList.remove("show");
-    }
 
+    function selectAddress(element) {
+  // Remove the 'selected' class from any previously selected address
+  const previouslySelected = document.querySelector('.addressCard.selected');
+  if (previouslySelected) {
+    previouslySelected.classList.remove('selected');
+  }
+
+  // Add the 'selected' class to the clicked address
+  element.classList.add('selected');
+}
     // Close dropdown when clicking outside
     window.onclick = function(event) {
       if (!event.target.matches('.dropdown-toggle')) {
@@ -139,7 +318,8 @@
         }
       }
     }
-</script>
+ 
+  </script>
   
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="../js/coupon.js"></script>

@@ -742,19 +742,19 @@ const applyCoupon = async (req, res) => {
     // Find the coupon based on the provided couponCode
     const coupon = await Coupon.findOne({ couponCode });
     if (!coupon) {
-      return res.status(404).json({ success: false, message: 'Coupon not found' });
+      return res.status(404).json({ success: false, message: 'COUPON NOT FOUND' });
     }
     // Check if the coupon has expired
     const currentDate = new Date();
     if (coupon.expiryDate <= currentDate) {
       console.log('Coupon has expired');
-      return res.status(401).json({ success: false, message: 'Coupon has expired' });
+      return res.status(401).json({ success: false, message: 'COUPON HAS EXPIRED' });
     }
 
     // Check if the coupon has reached the usage limit
     if (coupon.usedCount >= coupon.usageLimit) {
       console.log('Coupon has reached the usage limit');
-      return res.status(401).json({ success: false, message: 'Coupon has reached the usage limit' });
+      return res.status(401).json({ success: false, message: 'COUPON HAS REACHED THE USAGE LIMIT' });
     }
 
     // Check if the totalValue is within the valid range
@@ -763,17 +763,18 @@ const applyCoupon = async (req, res) => {
       // Proceed with coupon application
       coupon.usedCount += 1;
       await coupon.save();
-
+      
       console.log('Coupon applied successfully');
       return res.json({ success: true, coupon });
     } else {
+      console.log(totalValue);
       // Total value is outside the valid range
       console.log('Purchase amount is outside the coupon range.');
-      return res.status(400).json({ success: false, message: 'Purchase amount is outside the coupon range' });
+      return res.status(400).json({ success: false, message: 'COUPON CONDITION NOT MET' });
     }
   } catch (error) {
     console.error('Error applying coupon:', error);
-    return res.status(500).json({ success: false, message: 'Error applying coupon' });
+    return res.status(500).json({ success: false, message: 'ERROR APPLYTING COUPON' });
   }
 };
 

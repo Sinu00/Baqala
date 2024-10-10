@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Dropdown Test</title>
+    <style>
+        /* Reset and base styles */
+        html {
+            scroll-behavior: smooth;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f2f2f2;
+        }
+        .dropdown-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dropdown-toggle {
+            padding: 12px 16px;
+            font-size: 16px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 17px;
+            width: 95%;
+        }
+        .dropdown-toggle:hover,
+        .dropdown-toggle:focus {
+            background-color: #f8f8f8;
+            border-color: #999;
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        .dropdown-menu.show {
+            display: block;
+        }
+        .dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .dropdown-item:hover {
+            background-color: #f0f0f0;
+        }
+        .seladdsec {
+            display: flex;
+            justify-content: center;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <section class="seladdsec">
+        <div class="dropdown-container">
+            <button class="dropdown-toggle" onclick="toggleDropdown()">Select an address</button>
+            <div class="dropdown-menu" id="addressDropdown">
+                <!-- Static dummy data for addresses -->
+                <div class="dropdown-item addressCard" data-address-id="1" onclick="selectAddress(this)">
+                    <p class="address-number">Address: 1</p>
+                    <p class="user-name">John Doe</p>
+                    <p class="country">USA</p>
+                    <p class="street-address">123 Elm Street</p>
+                    <p class="city">New York</p>
+                    <p class="state">NY</p>
+                    <p class="pincode">10001</p>
+                </div>
+                <div class="dropdown-item addressCard" data-address-id="2" onclick="selectAddress(this)">
+                    <p class="address-number">Address: 2</p>
+                    <p class="user-name">Jane Doe</p>
+                    <p class="country">Canada</p>
+                    <p class="street-address">456 Maple Ave</p>
+                    <p class="city">Toronto</p>
+                    <p class="state">ON</p>
+                    <p class="pincode">M5H 2N2</p>
+                </div>
+                <div class="dropdown-item addressCard" data-address-id="3" onclick="selectAddress(this)">
+                    <p class="address-number">Address: 3</p>
+                    <p class="user-name">Sam Smith</p>
+                    <p class="country">UK</p>
+                    <p class="street-address">789 Oak Road</p>
+                    <p class="city">London</p>
+                    <p class="state">LDN</p>
+                    <p class="pincode">SW1A 1AA</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <h3>Select an Address</h3>
+    <form id="addressForm">
+        <label>
+            <input type="radio" name="address" value="Address 1">
+            Address 1: John Doe, 123 Main St, New York, NY, 10001
+        </label><br>
+        <label>
+            <input type="radio" name="address" value="Address 2">
+            Address 2: Jane Smith, 456 Elm St, Los Angeles, CA, 90001
+        </label><br>
+        <label>
+            <input type="radio" name="address" value="Address 3">
+            Address 3: Sam Wilson, 789 Oak St, Chicago, IL, 60601
+        </label><br>
+    </form>
+
+    <script>
+
+
+        let addressform = document.getElementById('addressForm');
+        addressform.addEventListener('click',function(){
+            let address = document.querySelector('input[name="address"]:checked');
+            console.log(address.innerText);
+        })
+
+        
+
+        // Toggle the dropdown
+        function toggleDropdown() {
+            document.getElementById("addressDropdown").classList.toggle("show");
+        }
+    
+        function selectAddress(element) {
+            // Remove the 'selected' class from any previously selected address
+            const previouslySelected = document.querySelector('.addressCard.selected');
+            if (previouslySelected) {
+                previouslySelected.classList.remove('selected');
+            }
+    
+            // Add the 'selected' class to the clicked address
+            element.classList.add('selected');
+    
+            // Log the details of the selected address
+            logSelectedAddress(element);
+        }
+    
+        function logSelectedAddress(element) {
+            // Retrieve the data attributes and content from the selected address element
+            const addressNumber = element.querySelector('.address-number').textContent.trim();
+            const userName = element.querySelector('.user-name').textContent.trim();
+            const country = element.querySelector('.country').textContent.trim();
+            const streetAddress = element.querySelector('.street-address').textContent.trim();
+            const city = element.querySelector('.city').textContent.trim();
+            const state = element.querySelector('.state').textContent.trim();
+            const pincode = element.querySelector('.pincode').textContent.trim();
+    
+            // Log the details to the console
+            console.log('Selected Address Details:');
+            console.log('Address Number:', addressNumber);
+            console.log('User Name:', userName);
+            console.log('Country:', country);
+            console.log('Street Address:', streetAddress);
+            console.log('City:', city);
+            console.log('State:', state);
+            console.log('Pincode:', pincode);
+        }
+    
+        // Close dropdown when clicking outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropdown-toggle')) {
+                var dropdowns = document.getElementsByClassName("dropdown-menu");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
+    
+</body>
+</html>

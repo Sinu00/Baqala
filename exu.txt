@@ -97,7 +97,6 @@ function handleConfirmPayment(event) {
     getCheckoutProductSummary();
     getCheckoutAddressSummary();
     getPaymentDetails();
-    checkcouponapplied();
     return true;
   } else {
     const selectAddressModal = new bootstrap.Modal(document.getElementById('selectAddress'));
@@ -111,11 +110,6 @@ function handleConfirmPayment(event) {
     return false;
 
   }
-}
-
-function checkcouponapplied(){
-  console.log(isCouponApplied);
-  console.log()
 }
 
 function validateAddress() {

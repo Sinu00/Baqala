@@ -10,15 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkoutExpressRadio = document.getElementById('checkoutExpressShipping');
     const subTotalCheckout = document.getElementById('checkoutSubTotal');
     const totalCheckout = document.getElementById('checkoutTotal');
-    const couponApplyBtn = document.getElementById('couponApplyBtn');
+    const couponApplyBtn1 = document.getElementById('couponApplyBtn');
     const discountCoupon = document.getElementById('discountCouponId');//discountCoupon is the field in the main checkout shows discount 
     const couponError = document.getElementById('couponError');
     const minCouponError = document.getElementById('minCouponError');
+const EXPRESS_SHIPPING_CHARGE = 15;
 
     checkoutExpressRadio.addEventListener('change', updateSubtotalAndTotal);
     checkoutFreeRadio.addEventListener('change', updateSubtotalAndTotal);
     
-  couponApplyBtn.addEventListener('click', () => {
+  couponApplyBtn1.addEventListener('click', () => {
     const couponCode = document.getElementById('couponCode').value;
     const totalValue = totalCheckout.innerText.replace('₹','');
     
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             minPurchase = data.coupon.minPurchase;
             maxPurchase = data.coupon.maxPurchase;
             isCouponApplied = true;
-            couponApplyBtn.style.display = 'none';
+            couponApplyBtn1.style.display = 'none';
             updateSubtotalAndTotal();
           } else {
             console.log('Coupon validation failed:', data.message);
@@ -138,7 +139,8 @@ async function updateSubtotalAndTotal() {
   subTotalElements.forEach((subTotalElement, index) => {
     const subtotalValue = parseFloat(subTotalElement.textContent.replace('Total: ₹', ''));
     totalSubTotal += subtotalValue;
-
+    console.log(subtotalValue)
+    console.log(totalSubTotal);
     if (discountElements[index]) {
       const discountValue = parseFloat(discountElements[index].textContent.replace('Discount: ₹', ''));
       totalDiscount += discountValue;
@@ -176,14 +178,17 @@ async function updateSubtotalAndTotal() {
         couponError.innerText = 'Total is too low to apply the discount.';
         discountCoupon.innerText = '₹0.00';
         minCouponError.style.display = 'none';
+        console.log("here1")
       } else {
         couponError.style.display = 'none';
         discountCoupon.innerText = `₹${couponDiscount.toFixed(2)}`;
         minCouponError.style.display = 'none';
+        console.log("here2")
       }
     } else {
       minCouponError.style.display = 'block';
       couponError.style.display = 'none';
+      console.log("here3")
     }
   }
 
@@ -231,5 +236,4 @@ shippingRadios.forEach(shippingRadio => {
 // Update the total initially
 updateSubtotalAndTotal();
 
- 
 });//end of dom content load
