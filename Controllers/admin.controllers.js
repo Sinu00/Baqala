@@ -575,11 +575,11 @@ if (!req.session.totalSales) {
   const { totalSales = 0 } = req.session.totalSales;
   const doc = new PDFDocument();
   doc.info.Title = 'Sales Report';
-  doc.info.Author = 'Planet Ecommerce Pvt. Ltd';
+  doc.info.Author = 'Baqala Pvt. Ltd';
 
   // Add content to the PDF
   doc.fontSize(18).text('Sales Report', { align: 'center' });
-  doc.fontSize(14).text('Planet Ecommerce Pvt. Ltd', { align: 'center' });
+  doc.fontSize(14).text('Baqala Pvt. Ltd', { align: 'center' });
   doc.moveDown();
 
   // Add the selected start and end dates

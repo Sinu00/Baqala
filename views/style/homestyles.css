@@ -16,6 +16,30 @@ html {
     background-color: #f2f2f2;
   }
 
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: white;
+    border-bottom: 1px solid #e0e0e0;
+
+    position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  }
+  
+  .logo {
+    height: 50px; /* Adjust the height as needed */
+    width: auto; /* Maintain the aspect ratio */
+    margin-right: 10px; /* Space between the two logo images */
+  }
+  
+  
+
   
   .container {
     max-width: 1200px;
@@ -38,6 +62,7 @@ html {
 /* Hero Section */
 .hero {
     padding: 20px 0 0 0;
+    margin-top: 70px;
 }
 
 .carousel {

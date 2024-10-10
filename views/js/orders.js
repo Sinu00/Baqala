@@ -29,7 +29,7 @@ var options = {
   "key":"rzp_test_VMpJagMb9qPo7c" , // Enter the Key ID generated from the Dashboard
   "amount":"",                
   "currency": "INR",
-  "name": "Planet ecommerce Pvt.Ltd",
+  "name": "Baqala Pvt.Ltd",
   "description": "Test Transaction",
   "image": "https://example.com/your_logo",
   "order_id": "", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
@@ -97,26 +97,26 @@ function handleConfirmPayment(event) {
     getCheckoutProductSummary();
     getCheckoutAddressSummary();
     getPaymentDetails();
-    checkcouponapplied();
     return true;
   } else {
-    const selectAddressModal = new bootstrap.Modal(document.getElementById('selectAddress'));
-    selectAddressModal.show();
-    setTimeout(() => {
-      selectAddressModal.hide();
-    }, 1000);
+    showToast("Please Select An Address")
     // alert('Please select an address');
-    showToast("Please Select An Address");
     console.log('Please make sure all data is selected');
     return false;
 
   }
 }
 
-function checkcouponapplied(){
-  console.log(isCouponApplied);
-  console.log()
-}
+function showToast( message) {
+  var x = document.getElementById("snackbar");
+  x.textContent =  message; // Set the toast message
+  x.classList.add("show");
+  
+  // Hide the toast after 3 seconds
+  setTimeout(function() {
+  x.classList.remove("show");
+  }, 3000);
+  }
 
 function validateAddress() {
   // the !! is used to convert data into boolean value

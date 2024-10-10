@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Planet Ecomm - Checkout</title>
+  <title>Baqala- Checkout</title>
   <link rel="stylesheet" href="../style/checkout.css">
   <link rel="stylesheet" href="../style/navbarstyle.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -11,15 +11,15 @@
 </head>
 <body>
   <%- include('../partials/navbar'); %>
+  <section>
+    <div class="header">
+      <button id="backButton" class="back-button"><i class="fa-solid fa-arrow-left"></i></button>
+      <h3>Check-Out</h3>
+      <span class="coupons">  </span>
+    </div>
+  </section>
   <main>
 <!-- heading section -->
-<section>
-  <div class="header">
-    <button class="back-button">&larr;</button>
-    <span>Cart</span>
-    <span class="coupons">Coupons</span>
-  </div>
-</section>
 <section class="seladdsec">
   <div class="dropdown-container">
     <button class="dropdown-toggle" onclick="toggleDropdown()">Select an address</button>
@@ -42,13 +42,15 @@
               onclick="selectAddress(this)"
             />
             <label for="address<%= index %>">
+              <div class="address-info">
               <p class="address-number">Address: <%= index + 1 %></p>
-              <p class="user-name"><%= userCart.user.name %></p>
-              <p class="country"><%= address.country %></p>
-              <p class="street-address"><%= address.streetAddress %></p>
-              <p class="city"><%= address.city %></p>
-              <p class="state"><%= address.state %></p>
-              <p class="pincode"><%= address.pincode %></p>
+              <p class="user-name">Name: <%= userCart.user.name %></p>
+              <p class="country">Country: <%= address.country %></p>
+              <p class="street-address">StreetAddress: <%= address.streetAddress %></p>
+              <p class="city">City: <%= address.city %></p>
+              <p class="state">State: <%= address.state %></p>
+              <p class="pincode">Pincode: <%= address.pincode %></p>
+            </div>
             </label>
           </div>
           <button class="edit-address-btn" data-address-id="<%= address.id %>">Edit</button>
@@ -104,7 +106,7 @@
                 </div>
               </div>
             <% }); %>
-            <button class="add-more-items">+ Add more items</button>
+            <button class="add-more-items" id="addmoreButton">+ Add more items</button>
           </div>
         </section>
     
@@ -153,10 +155,10 @@
         <a class="nav-link active" id="cod-tab" data-bs-toggle="tab" data-bs-target="#COD" type="button" role="tab" aria-controls="COD" aria-selected="true" href="#COD">Cash on Delivery</a>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="wallet-tab" data-bs-toggle="tab" data-bs-target="#Wallet" type="button" role="tab" aria-controls="Wallet" aria-selected="false">Wallet</button>
+        <button class="nav-link" id="wallet-tab" data-bs-toggle="tab" data-bs-target="#Wallet" type="button" role="tab" aria-controls="Wallet" aria-selected="false">W̶a̶l̶l̶e̶t̶</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="online-tab" data-bs-toggle="tab" data-bs-target="#Online" type="button" role="tab" aria-controls="Online" aria-selected="false">Online Payment</button>
+        <button class="nav-link" id="online-tab" data-bs-toggle="tab" data-bs-target="#Online" type="button" role="tab" aria-controls="Online" aria-selected="false">O̶n̶l̶i̶n̶e̶ P̶a̶y̶m̶e̶n̶t̶</button>
       </li>
     </ul>
     <div class="tab-content" id="paymentTabsContent">
@@ -181,41 +183,26 @@
       <input type="radio" class="shipping" name="shipping" id="checkoutExpressShipping" value="express">
       <label for="checkoutExpressShipping">Express Shipping (+₹15)</label>
     </div>
-<div class="subtotal-container">
-  <p>Subtotal: <span id="checkoutSubTotal">₹0.00</span></p>
-  <p>Total: <span id="checkoutTotal">₹0.00</span></p>
-  <p>Discount: <span id="discountCouponId">- 0.00</span></p>
-  <button type="button" class="confrimPayementBtn">Confirm Payment</button>
+    <div class="subtotal-container">
+      <p>Subtotal: <span id="checkoutSubTotal">₹0.00</span></p>
+      <p>Total: <span id="checkoutTotal">₹0.00</span></p>
+      <p>Discount: <span id="discountCouponId">- 0.00</span></p>
+      <button type="button" class="confrimPayementBtn">Confirm Payment</button>
+    </div>
   </div>
-</div>
 
   <!-- Display the wallet balance -->
-  <p>Wallet Balance: ₹<span id="walletBalance"><%= walletBalance %></span></p>
-   <div class="form-group">
-       <label for="useWallet">Use Wallet Balance:</label>
-       <input type="radio" id="useWallet" name="useWallet" value="yes"> Yes
-       <input type="radio" id="useWallet" name="useWallet" value="no" checked> No
-
-   </div>
-
-  </div>   
+   <div class="hide">
+  <p class="hide">Wallet Balance: ₹<span id="walletBalance"><%= walletBalance %></span></p>
+  <div class="form-group">
+    <label for="useWallet">Use Wallet Balance:</label>
+    <input type="radio" id="useWalletYes" name="useWallet" value="yes"> Yes
+    <input type="radio" id="useWalletNo" name="useWallet" value="no" checked> No
+  </div>
+</div>
 </section>
 
 
-  <!-- Modal for address selection reminder -->
-  <div class="modal fade" id="selectAddress" tabindex="-1" aria-labelledby="selectAddressLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="selectAddressLabel">Select Address</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          Please select an address before confirming payment.
-        </div>
-      </div>
-    </div>
-  </div>
 
     <!-- Add Address Modal -->
     <div class="modal" id="addAddressModal">
@@ -290,6 +277,17 @@
   </main>
 
   <script>
+    document.getElementById('backButton').addEventListener('click', function() {
+    window.history.back();
+    window.history.back();
+});
+
+document.getElementById('addmoreButton').addEventListener('click', function() {
+  window.location.href = '/products';
+});
+
+
+
         // Toggle the dropdown
         function toggleDropdown() {
       document.getElementById("addressDropdown").classList.toggle("show");

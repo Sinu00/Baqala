@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planet Ecomm</title>
+    <title>BAQALA</title>
     <link rel="stylesheet" href="../style/cartpage.css">
     <link rel="stylesheet" href="../style/navbarstyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -12,8 +12,13 @@
 <body>
   <%- include('../partials/navbar');%>
 
+    <div class="header">
+      <button id="backButton" class="back-button"><i class="fa-solid fa-arrow-left"></i></button>
+      <h3>Cart Items</h3>
+      <span class="coupons">  </span>
+    </div>
+
   <main>
-    <h3>Cart Items</h3>
     <section class="cartitemdisplay">
       <% populatedCart.cartItems.forEach((cartItem, index) => { %>
         <div class="cartitemscard">
@@ -188,6 +193,12 @@
 
 
  <script>
+
+document.getElementById('backButton').addEventListener('click', function() {
+    window.history.back();
+    window.history.back();
+});
+
 // Ensure the script runs only after the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
   // Select all delete buttons and the checkout button

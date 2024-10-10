@@ -13,6 +13,11 @@
 <body>
 
      <%- include('../partials/navbar');%>
+     <div class="header">
+      <button id="backButton" class="back-button"><i class="fa-solid fa-arrow-left"></i></button>
+      <h3><%= product.productTitle.toUpperCase() %></h3>
+      <span class="coupons">  </span>
+    </div>
 
      <main>
       <section class="product-container">
@@ -25,14 +30,6 @@
             <p><%= product.productDescription %></p>
             <p>Category: <%= product.category %></p>
             <h3><span>&#8377;</span> <%= product.productPrice %></h3>
-            <div class="quantity-section">
-                <label for="quantity" class="quantity-label">Quantity:</label>
-                <div class="input-group">
-                    <button class="quantity-btn" id="decrementButton">-</button>
-                    <input type="number" class="quantity-input" product-data-id="<%= product._id %>" id="quantityInput" min="1" value="1" step="1">
-                    <button class="quantity-btn" id="incrementButton">+</button>
-                </div>
-            </div>
             <button class="add-to-cart-btn" id="addToCartBtnId" onclick="addToCart('<%= product._id %>') ">Add to Cart</button>
         </div>
     </section>
@@ -119,6 +116,11 @@
         </div>  -->
 
     <script>
+
+document.getElementById('backButton').addEventListener('click', function() {
+    window.history.back();
+    window.history.back();
+});
 
 document.addEventListener('DOMContentLoaded', () =>{
 const incrementButton = document.getElementById('incrementButton');
